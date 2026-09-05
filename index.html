@@ -693,7 +693,7 @@
        All of this is progressive enhancement: if JS never runs, every
        element below simply keeps its normal static appearance.
        ============================================================ */
-    html{ scroll-behavior: smooth; }
+    html{ scroll-behavior: auto; } /* Lenis drives the smoothing now — native smooth-scroll left ON here fights it frame-by-frame */
 
     @media (hover:hover) and (pointer:fine){
         body, a, button, summary{ cursor: none !important; }
@@ -2914,7 +2914,7 @@
         if (typeof Lenis === 'undefined') return;
 
         var lenis = new Lenis({
-            lerp: 0.1,
+            lerp: 0.09,
             smoothWheel: true,
             wheelMultiplier: 1,
             touchMultiplier: 1.5
@@ -2925,6 +2925,11 @@
             requestAnimationFrame(raf);
         }
         requestAnimationFrame(raf);
+
+        // Images/fonts finishing late shift the page height; re-measure so
+        // Lenis's internal scroll bounds stay accurate (prevents a jump/snap
+        // partway through scrolling once the layout settles).
+        window.addEventListener('load', function () { lenis.resize(); });
 
         // Make in-page anchor links (nav, "View Collections", etc.) glide
         // smoothly to their target instead of jumping.
