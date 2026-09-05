@@ -8,6 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,500&family=Inter:wght@300;400;500;600;700&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/lenis@1/dist/lenis.css">
 
     <style>
     :root{
@@ -2904,6 +2905,42 @@
       [120,400,900,1800,3000].forEach(t=>win.setTimeout(boot,t));
     })();
     </script>
-    
+        <script src="https://unpkg.com/lenis@1/dist/lenis.min.js"></script>
+    <script>
+    (function () {
+        // Respect users who've asked for reduced motion — skip the smooth-scroll
+        // layer entirely for them, native scroll is fine.
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+        if (typeof Lenis === 'undefined') return;
+
+        var lenis = new Lenis({
+            duration: 1.1,
+            easing: function (t) { return Math.min(1, 1.001 - Math.pow(2, -10 * t)); },
+            smoothWheel: true,
+            touchMultiplier: 1.6
+        });
+
+        function raf(time) {
+            lenis.raf(time);
+            requestAnimationFrame(raf);
+        }
+        requestAnimationFrame(raf);
+
+        // Make in-page anchor links (nav, "View Collections", etc.) glide
+        // smoothly to their target instead of jumping.
+        document.querySelectorAll('a[href^="#"]').forEach(function (a) {
+            a.addEventListener('click', function (e) {
+                var id = a.getAttribute('href');
+                if (id && id.length > 1) {
+                    var target = document.querySelector(id);
+                    if (target) {
+                        e.preventDefault();
+                        lenis.scrollTo(target, { offset: -10 });
+                    }
+                }
+            });
+        });
+    })();
+    </script>
 </body>
 </html>
