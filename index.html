@@ -22,7 +22,10 @@
         --muted: rgba(249,246,240,0.62);
     }
 
-    /* Kill default streamlit chrome */
+    *{ box-sizing: border-box; }
+    html, body{ margin: 0; padding: 0; }
+
+    /* Kill default streamlit chrome (harmless leftovers if any Streamlit wrapper is present) */
     #MainMenu, footer, header {visibility: hidden;}
     div[data-testid="stToolbar"], div[data-testid="stDecoration"], div[data-testid="stStatusWidget"] {display:none;}
     div[data-testid="stAppViewContainer"], .main, .block-container {
@@ -30,6 +33,10 @@
     }
     div[data-testid="stAppViewContainer"], .main{
         background: var(--bg-deep) !important;
+    }
+    html, body{
+        background: var(--bg-deep);
+        min-height: 100%;
     }
     .block-container{
         max-width: 1240px;
@@ -44,6 +51,10 @@
     body, html, [class*="css"]{
         font-family: 'Inter', sans-serif;
         color: var(--ivory);
+        background:
+            radial-gradient(1100px 550px at 12% -8%, rgba(212,175,55,0.06), transparent 60%),
+            radial-gradient(950px 650px at 92% 105%, rgba(193,154,107,0.05), transparent 60%),
+            var(--bg-deep);
     }
     ::selection{ background: var(--gold-soft); color: var(--ivory); }
 
