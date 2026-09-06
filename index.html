@@ -2909,6 +2909,20 @@
             -webkit-backdrop-filter:none !important;
         }
     }
+
+    /* -------------------------------------------------------------------
+       PAUSE DECORATIVE ANIMATIONS WHILE SCROLLING
+       There are ~15 infinite CSS animations running non-stop on this page
+       (gold glows, sweeps, orbit rings, the marquee, etc). None of them are
+       essential while your eye is busy scrolling — pausing them for the
+       ~150ms a scroll gesture is active hands the full frame budget to the
+       scroll itself. They resume the instant scrolling stops.
+       (This only touches `animation`, not `transition` — the reveal-on-
+       scroll fade-ins use transitions, so they're untouched.)
+    ------------------------------------------------------------------- */
+    html.is-scrolling *, html.is-scrolling *::before, html.is-scrolling *::after{
+        animation-play-state: paused !important;
+    }
     </style>
     
 
@@ -2947,6 +2961,16 @@
             smoothWheel: true,
             wheelMultiplier: 1,
             touchMultiplier: 1.5
+        });
+
+        var scrollIdleTimer;
+        var html = document.documentElement;
+        lenis.on('scroll', function () {
+            html.classList.add('is-scrolling');
+            clearTimeout(scrollIdleTimer);
+            scrollIdleTimer = setTimeout(function () {
+                html.classList.remove('is-scrolling');
+            }, 150);
         });
 
         function raf(time) {
