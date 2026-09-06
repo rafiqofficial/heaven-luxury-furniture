@@ -83,9 +83,9 @@
         position: sticky;
         top: 0;
         z-index: 1000;
-        background: rgba(10,19,23,0.78);
-        backdrop-filter: blur(14px);
-        -webkit-backdrop-filter: blur(14px);
+        background: rgba(10,19,23,0.87);
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
     }
     .logo{
         font-family:'Playfair Display', serif;
@@ -329,8 +329,8 @@
         position: fixed; left:0; right:0; bottom:0; z-index: 9998;
         display:flex; align-items:center; justify-content:center; gap:22px;
         padding: 16px 24px;
-        background: rgba(9,17,20,0.92);
-        backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+        background: rgba(9,17,20,0.96);
+        backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
         border-top: 1px solid var(--gold-soft);
         transform: translateY(120%);
         transition: transform .45s cubic-bezier(.22,1,.36,1);
@@ -2888,6 +2888,27 @@
         -webkit-backdrop-filter:blur(20px) !important;
     }
     #place-order.order-section::before{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;background:linear-gradient(135deg,rgba(255,255,255,.018),transparent 42%,rgba(0,0,0,.10));}
+
+    /* -------------------------------------------------------------------
+       MOBILE SCROLL PERFORMANCE — actual fix.
+       The earlier `*{ backdrop-filter:none !important }` rule further up
+       can never override class-selector rules (.assembly-spec, .order-section,
+       etc.) — a class selector always beats the universal selector on
+       specificity, regardless of !important or source order. That made the
+       original "strip blur on mobile" attempt a no-op for every card that
+       actually mattered. Listing the real classes here — at matching
+       specificity and last in the file — makes it actually take effect.
+    ------------------------------------------------------------------- */
+    @media(max-width:900px){
+        .nav-wrap, .cta-ghost, .sticky-cta, .collection-arrow,
+        .assembly-depth-badge, .surface-tag, .walk-badge, .walk-marker,
+        .walk-status, .crafted-built, .assembly-spec, .studio-controls,
+        .assembly-controls, .walk-panel, .order-section, #place-order.order-section,
+        .order-input, .order-textarea{
+            backdrop-filter:none !important;
+            -webkit-backdrop-filter:none !important;
+        }
+    }
     </style>
     
 
